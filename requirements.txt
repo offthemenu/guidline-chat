@@ -1,0 +1,8 @@
+transformers
+sentence-transformers
+faiss-cpu
+torch
+python-dotenv
+ollama
+streamlit
+PyPDF2
