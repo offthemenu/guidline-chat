@@ -6,3 +6,4 @@ python-dotenv
 ollama
 streamlit
 PyPDF2
+numpy<2
