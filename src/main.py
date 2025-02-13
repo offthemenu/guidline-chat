@@ -4,6 +4,7 @@ import ollama
 from chat_memory import initialize_chat, add_user_message, format_chat_history
 from pdf_loader import load_documents
 from retrieval import create_document_chunks, build_faiss_index, retrieve_similar_chunks
+from llm import generate_answer
 import warnings
 from urllib3.exceptions import NotOpenSSLWarning
 
@@ -50,16 +51,17 @@ user_input = st.chat_input("Ask a question...")
 if user_input:
     add_user_message("user", user_input)
     
-    # Retrieve similar chunks
-    similar_chunks = retrieve_similar_chunks(user_input, index, chunk_texts)
-    context = "\n\n".join(similar_chunks)
-    
-    # Construct a full prompt for the model
-    prompt = f"{format_chat_history()}\n\nRelevant Info:\n{context}\n\nUser: {user_input}\nAssistant:"
-    
-    #Generate response using the model (OLLAMA)
-    response = ollama.chat(model = MODEL, messages=[{"role": "system", "content": prompt}])
-    response_text = response["message"]["content"]
-        
+    # Ensure documents were uploaded before retrieving
+    if "index" in locals() and "chunk_texts" in locals():
+        # Retrieve similar chunks
+        similar_chunks = retrieve_similar_chunks(user_input, index, chunk_texts)
+        context = "\n\n".join(similar_chunks)
+    else:
+        context = "No documents have been uploaded. Please upload relevant guidelines."
+
+    # Generate AI response using Llama 3
+    response_text = generate_answer(context, user_input, format_chat_history())
+
+    # Store & display assistant response
     add_user_message("assistant", response_text)
     st.chat_message("assistant").write(response_text)
