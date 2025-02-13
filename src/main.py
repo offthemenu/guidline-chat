@@ -1,7 +1,7 @@
 import os
 import streamlit as st
 import ollama
-from chat_memory import initialize_chat, add_user_message, format_chat_history
+from chat_memory import initialize_chat, add_user_message, display_chat
 from pdf_loader import load_documents
 from retrieval import create_document_chunks, build_faiss_index, retrieve_similar_chunks
 from llm import generate_answer
@@ -42,8 +42,7 @@ if uploaded_file:
     st.success(f"Loaded {len(doc_chunks)} document chunks.")
     
 # Display chat history
-for message in st.session_state["chat_history"]:
-    st.chat_message(message["role"]).write(message["content"])
+display_chat()
 
 # User input
 user_input = st.chat_input("Ask a question...")
@@ -60,7 +59,7 @@ if user_input:
         context = "No documents have been uploaded. Please upload relevant guidelines."
 
     # Generate AI response using Llama 3
-    response_text = generate_answer(context, user_input, format_chat_history())
+    response_text = generate_answer(context, user_input, "")
 
     # Store & display assistant response
     add_user_message("assistant", response_text)

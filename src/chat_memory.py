@@ -8,7 +8,18 @@ def initialize_chat():
         ]
 
 def add_user_message(role, content):
+    '''
+    Add a user message to the chat history
+    '''
     st.session_state["chat_history"].append({"role": role, "content": content})
-    
-def format_chat_history():
-    return "\n".join([f"{msg['role'].capitalize()}: {msg['content']}" for msg in st.session_state["chat_history"]]) # Return the formatted chat history
+
+def display_chat():
+    '''
+    Displays chat history without additional formatting
+    '''
+
+    for message in st.session_state["chat_history"]:
+        if message["role"] == "user":
+            st.chat_message("user").write(f"**User:** {message['content']}")
+        else:
+            st.chat_message("assistant").write(f"**Assistant:** {message['content']}")
