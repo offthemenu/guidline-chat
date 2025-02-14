@@ -3,9 +3,10 @@ import ollama
 
 # llama3 only supports local usage. We'll need to think about using a free model on huggingface that can support cloud deployment
 # first, let's try using ngrok to use ollama and keep it running on my mac mini
+# brew install ngrok
 
 MODEL = "llama3"
-OLLAMA_SERVER_URL = "https://de99-112-220-73-130.ngrok-free.app"
+OLLAMA_SERVER_URL = "https://de99-112-220-73-130.ngrok-free.app" # may need to change this to the ngrok url shown in mac mini setting
 
 def generate_answer(context, question, chat_history):
     """
